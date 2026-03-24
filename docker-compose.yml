@@ -1,0 +1,13 @@
+
+services:
+  postgres_mcp_server:
+    image: postgres:15
+    container_name: postgres_mcp_server
+  
+  langchain_app:
+    build: ./langchain
+    container_name: langchain_app
+    environment:
+      - USER_QUESTION=How many wheels are there on a school bus?
+    
+
