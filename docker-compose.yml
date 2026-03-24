@@ -8,7 +8,7 @@ services:
     build: ./langchain
     container_name: langchain_app
     environment:
-      - USER_QUESTION=How many wheels are there on a school bus?
+      #- USER_QUESTION=How many wheels are there on a school bus?
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     
 

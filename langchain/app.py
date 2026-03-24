@@ -7,9 +7,12 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 
 #env - USER_QUESTION
-async def ask_question():
+async def run_task(user_query = "What is the capital of France?"):
     # 1. Grab the question from the Docker environment
-    user_query = os.getenv("USER_QUESTION", "What is the capital of France?")
+    if not user_query:
+        print("No user query provided.")
+        return
+    user_query = os.getenv("USER_QUESTION", user_query)
 
     # 2. Grab the API key from the environment
     #openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -30,4 +33,4 @@ async def ask_question():
     print(f"\nAI Response:\n{response.content}")
 
 if __name__ == "__main__":
-    asyncio.run(ask_question())
+    asyncio.run(run_task())
