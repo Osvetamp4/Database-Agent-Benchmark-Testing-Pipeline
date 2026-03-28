@@ -1,0 +1,15 @@
+# Use a slim, stable 2026 Python base
+FROM python:3.11-slim
+
+WORKDIR /app
+
+
+COPY *_requirements.txt .
+RUN pip install --no-cache-dir -r *_requirements.txt
+RUN mkdir -p /app/frameworks
+# Copy the script
+COPY generic.py .
+COPY ./frameworks/*_logic.py ./frameworks
+
+# Run the script when the container starts
+CMD ["python", "generic.py"]
