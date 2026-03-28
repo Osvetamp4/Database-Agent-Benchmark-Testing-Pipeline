@@ -21,7 +21,7 @@ async def main():
         spec.loader.exec_module(logic_module)
         # 3. EXECUTION: Call the standardized 'run_task' function
         # Note: In a full setup, you'd pass your MCP tools here
-        result = await logic_module.run_task() #userquery
+        result = await logic_module.run_task(user_query) #userquery
         
         print(f"--- [RESULT] ---\n{result}")
 

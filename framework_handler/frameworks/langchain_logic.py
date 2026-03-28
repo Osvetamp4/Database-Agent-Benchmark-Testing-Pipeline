@@ -13,7 +13,7 @@ async def run_task(user_query = "What is the capital of France?"):
     if not user_query:
         print("No user query provided.")
         return
-    user_query = os.getenv("USER_QUESTION", user_query)
+    #user_query = os.getenv("USER_QUESTION", user_query)
 
     # 2. Grab the API key from the environment
     #openai_api_key = os.getenv("OPENAI_API_KEY")

@@ -4,18 +4,11 @@ services:
     image: postgres:15
     container_name: postgres_mcp_server
   
-  langchain_app:
-    build: ./langchain
-    container_name: langchain_app
-    environment:
-      #- USER_QUESTION=How many wheels are there on a school bus?
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-  
   framework_handler:
     build: ./framework_handler
     container_name: framework_handler
     environment:
       - FRAMEWORK_TYPE=langchain
-      - USER_QUERY="test query"
+      - USER_QUERY="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
 
