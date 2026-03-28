@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 # Run the script when the container starts
-CMD ["python", "langchain_logic.py"]
+CMD ["python", "app.py"]

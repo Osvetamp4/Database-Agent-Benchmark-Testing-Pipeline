@@ -1,6 +1,8 @@
 import os
 import asyncio
 import importlib
+import importlib.util
+import sys
 
 async def main():
     # 1. READ ENVIRONMENT: Which plug are we using?
@@ -12,12 +14,14 @@ async def main():
     try:
         # 2. DYNAMIC IMPORT: This is the "Plug and Play" secret
         # It looks for frameworks/langchain_logic.py
-        module_path = f"frameworks.{framework}_logic"
-        logic_module = importlib.import_module(module_path)
-        
+        module_file = os.path.join("frameworks", f"{framework}_logic.py")
+        spec = importlib.util.spec_from_file_location(f"{framework}_logic", module_file)
+        logic_module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = logic_module
+        spec.loader.exec_module(logic_module)
         # 3. EXECUTION: Call the standardized 'run_task' function
         # Note: In a full setup, you'd pass your MCP tools here
-        result = await logic_module.run_task(user_query)
+        result = await logic_module.run_task() #userquery
         
         print(f"--- [RESULT] ---\n{result}")
 

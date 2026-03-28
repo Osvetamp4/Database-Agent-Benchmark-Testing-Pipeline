@@ -10,5 +10,12 @@ services:
     environment:
       #- USER_QUESTION=How many wheels are there on a school bus?
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-    
+  
+  framework_handler:
+    build: ./framework_handler
+    container_name: framework_handler
+    environment:
+      - FRAMEWORK_TYPE=langchain
+      - USER_QUERY="test query"
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
 
