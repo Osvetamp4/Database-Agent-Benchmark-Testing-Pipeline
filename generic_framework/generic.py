@@ -12,7 +12,7 @@ async def main():
 
     try:
         #dynamic improt
-        module_file = os.path.join("frameworks", f"{framework}_logic.py")
+        module_file = os.path.join("frameworks",f"{framework}_logic.py")#change to no framework folder
         spec = importlib.util.spec_from_file_location(f"{framework}_logic", module_file)
         logic_module = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = logic_module
@@ -22,8 +22,6 @@ async def main():
         
         print(f"--- [RESULT] ---\n{result}")
 
-    except ImportError:
-        print(f"Error: No logic file found for {framework}")
     except Exception as e:
         print(f"Execution Error: {e}")
 
