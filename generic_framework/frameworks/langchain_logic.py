@@ -7,7 +7,7 @@ import importlib.util
 
 
 
-#env - USER_QUESTION
+#input env - USER_QUESTION, GOOGLE_API_KEY
 async def run_task(user_query = "What is the capital of France?"):
     # 1. Grab the question from the Docker environment
     if not user_query:

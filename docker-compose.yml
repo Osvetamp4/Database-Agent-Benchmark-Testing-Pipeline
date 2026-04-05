@@ -8,7 +8,10 @@ services:
     build: ./framework_handler
     container_name: framework_handler
     environment:
-      - FRAMEWORK_TYPE=langchain
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - FRAMEWORK_LIST=langchain,langchain
       - USER_QUERY="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
