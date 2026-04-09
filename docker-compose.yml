@@ -3,11 +3,25 @@ services:
   # postgres_mcp_server:
   #   image: postgres:15
   #   container_name: postgres_mcp_server
+
+  evaluator:
+    build: ./eval
+    container_name: evaluator
+    depends_on:
+      - redis_storage
   
   redis_storage:
+    container_name: redis_storage
     image: redis:7-alpine
     expose:
       - "6379"
+  redis_insight:
+    image: redis/redisinsight:latest
+    ports:
+      - "9091:5540"
+    depends_on:
+      - redis_storage
+    
   
   framework_handler:
     build: ./framework_handler
@@ -19,4 +33,6 @@ services:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis_storage
 

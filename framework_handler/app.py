@@ -13,19 +13,21 @@ def spawn_worker(framework_name,api_key, user_query):
 
     # 2. Run the baked image
     container = client.containers.run(
-        image="universal-worker:v3",  # Use the exact name you baked
+        image="universal-worker:v5",  # Use the exact name you baked
         
         # 3. Inject the "Soul" (Variables)
         environment={
             "FRAMEWORK_TYPE": framework_name,
             "GOOGLE_API_KEY": api_key,
             "USER_QUERY": user_query,
-            "REDIS_HOST": "redis_storage"
+            "REDIS_HOST": "redis_storage",
+            "PYTHONUNBUFFERED": 1
         },
         
         # 4. Networking & Cleanup
         detach=True,                    # Run in background
-        auto_remove=True                # Automatically delete when done (no orphans!)
+        auto_remove=True,                # Automatically delete when done (no orphans!)
+        network="database-agent-benchmark-testing-pipeline_default"
     )
     hashed_containers[container.id] = container
     print(f"Handler: Spawned container {container.id} for {framework_name}")

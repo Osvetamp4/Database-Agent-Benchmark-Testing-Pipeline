@@ -14,4 +14,4 @@ COPY ./frameworks/*_logic.py ./frameworks
 
 
 # Run the script when the container starts
-CMD ["python", "generic.py"]
+CMD ["python","-u", "generic.py"]
