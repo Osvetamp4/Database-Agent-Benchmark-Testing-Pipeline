@@ -1,8 +1,13 @@
 
 services:
-  postgres_mcp_server:
-    image: postgres:15
-    container_name: postgres_mcp_server
+  # postgres_mcp_server:
+  #   image: postgres:15
+  #   container_name: postgres_mcp_server
+  
+  redis_storage:
+    image: redis:7-alpine
+    expose:
+      - "6379"
   
   framework_handler:
     build: ./framework_handler

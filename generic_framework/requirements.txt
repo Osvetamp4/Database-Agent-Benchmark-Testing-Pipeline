@@ -1,2 +1,4 @@
 langchain-core>=1.2.0
 langchain_google_genai
+redis==4.5.0
+Flask==3.0.2
