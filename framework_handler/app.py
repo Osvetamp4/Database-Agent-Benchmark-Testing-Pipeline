@@ -1,6 +1,8 @@
 import docker
 import os
 import asyncio
+import redis
+from flask import json
 
 # 1. Connect to the local Docker engine
 client = docker.from_env()
@@ -13,7 +15,7 @@ def spawn_worker(framework_name,api_key, user_query):
 
     # 2. Run the baked image
     container = client.containers.run(
-        image="universal-worker:v5",  # Use the exact name you baked
+        image="universal-worker:v6",  # Use the exact name you baked
         
         # 3. Inject the "Soul" (Variables)
         environment={
@@ -26,7 +28,7 @@ def spawn_worker(framework_name,api_key, user_query):
         
         # 4. Networking & Cleanup
         detach=True,                    # Run in background
-        auto_remove=True,                # Automatically delete when done (no orphans!)
+        #auto_remove=True,                # Automatically delete when done (no orphans!)
         network="database-agent-benchmark-testing-pipeline_default"
     )
     hashed_containers[container.id] = container
@@ -38,8 +40,13 @@ async def main(): #Input ENV: FRAMEWORK_LIST, GOOGLE_API_KEY, USER_QUERY
     framework_list = os.getenv("FRAMEWORK_LIST", "null").split(",")
     google_api_key = os.getenv("GOOGLE_API_KEY", "null")
     user_query = os.getenv("USER_QUERY", "What is the status of my database?")
+
+    REDIS_HOST = os.getenv("REDIS_HOST", "redis_storage")
+    r = redis.Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
+
     for i in framework_list:
         spawn_worker(i, google_api_key, user_query)
+        update_dictionary = r.lpush("hashed_containers", json.dumps(task_packet))
 
 
 if __name__ == "__main__":

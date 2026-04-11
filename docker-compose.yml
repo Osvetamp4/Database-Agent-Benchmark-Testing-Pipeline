@@ -27,6 +27,7 @@ services:
     build: ./framework_handler
     container_name: framework_handler
     environment:
+      - REDIS_HOST=redis_storage
       - DOCKER_HOST=unix:///var/run/docker.sock
       - FRAMEWORK_LIST=langchain,langchain
       - USER_QUERY="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"
