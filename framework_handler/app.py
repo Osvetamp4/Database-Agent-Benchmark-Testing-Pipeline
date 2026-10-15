@@ -37,7 +37,7 @@ def spawn_worker(framework_name,api_key, user_query):
     print(hashed_containers)
 
 async def main(): #Input ENV: FRAMEWORK_LIST, GOOGLE_API_KEY, USER_QUERY
-    framework_list = os.getenv("FRAMEWORK_LIST", "null").split(",")
+    framework_list = os.getenv("FRAMEWORK_LIST", "null").split(",") 
     google_api_key = os.getenv("GOOGLE_API_KEY", "null")
     user_query = os.getenv("USER_QUERY", "What is the status of my database?")
 
