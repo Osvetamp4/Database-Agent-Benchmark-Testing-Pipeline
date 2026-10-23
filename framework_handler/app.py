@@ -15,7 +15,7 @@ def spawn_worker(framework_name,api_key, user_query):
 
     # 2. Run the baked image
     container = client.containers.run(
-        image="universal-worker:v6",  # Use the exact name you baked
+        image="universal-worker:v7",  # Use the exact name you baked
         
         # 3. Inject the "Soul" (Variables)
         environment={
