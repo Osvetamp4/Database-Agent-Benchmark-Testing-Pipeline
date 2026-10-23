@@ -3,12 +3,12 @@ import asyncio
 import importlib
 import importlib.util
 import sys
-from abc import ABC, abstractmethod
+from base_framework import FrameworkLogic
+#python loads the program entry point(this file) as __main__
+#classes in this program entry point are named __main__.class_name not generic.class_name
+#__main__.class is not generic.class
 
-class FrameworkLogic(ABC):
-    @abstractmethod
-    async def run_task(self,user_query: str):
-        pass
+
 
 #ADD A LOCK ONTO THIS SO THAT IT ONLY RUNS AND COMMUNICATES TO THE API AFTER BEING GIVEN A SIGNAL
 async def main(): #INPUT ENV: FRAMEWORK_TYPE, USER_QUERY, GOOGLE_API_KEY
@@ -25,7 +25,7 @@ async def main(): #INPUT ENV: FRAMEWORK_TYPE, USER_QUERY, GOOGLE_API_KEY
         logic_module = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = logic_module
         spec.loader.exec_module(logic_module)
-        #also run connection to MCP server here
+        #offload MCP server connection to the framework code instead
         framework_class_name = f"{framework.capitalize()}Logic"
         logic_class = getattr(logic_module,framework_class_name)
         logic = logic_class()

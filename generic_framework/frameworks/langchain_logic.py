@@ -7,9 +7,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 import importlib.util
 import redis
-from generic import FrameworkLogic
-
-class LANGCHAINLogic(FrameworkLogic):
+from base_framework import FrameworkLogic
+class LangChainLogic(FrameworkLogic):
     async def run_task(self,user_query:str):
         try:
             REDIS_HOST = os.getenv("REDIS_HOST", "redis")
