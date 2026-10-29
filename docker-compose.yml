@@ -21,8 +21,16 @@ services:
       - "9091:5540"
     depends_on:
       - redis_storage
-    
-  
+
+  mcp_local:
+    build: ./mcp_local
+    container_name: mcp_local
+    environment:
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+    expose:
+      - "8000"
+
   framework_handler:
     build: ./framework_handler
     container_name: framework_handler
