@@ -6,8 +6,16 @@ from base_mcp_tools import MCPTools
 
 
 BACKEND_MODULES = {
-    "CSV": ("csv_tools", "CSVTools"),
-    "SQLITE": ("sqlite_tools", "SQLiteTools"),
+    "CSV": {
+        "module": "adapters.csv_tools",
+        "class": "CSVTools",
+        "is_local": True,
+    },
+    "SQLITE": {
+        "module": "adapters.sqlite_tools",
+        "class": "SQLiteTools",
+        "is_local": True,
+    }
 }
 
 TOOL_NAMES = (
@@ -35,7 +43,8 @@ def load_backend(database_name: str) -> MCPTools:
             f"Supported values: {supported}"
         )
 
-    module_name, class_name = backend_config
+    module_name = backend_config["module"]
+    class_name = backend_config["class"]
     backend_module = importlib.import_module(module_name)
     backend_class = getattr(backend_module, class_name, None)
 
