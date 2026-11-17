@@ -30,6 +30,8 @@ services:
       - MCP_PORT=8000
     expose:
       - "8000"
+    volumes:
+      - ./data:/app/data:rw
 
   framework_handler:
     build: ./framework_handler
