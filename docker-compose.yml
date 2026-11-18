@@ -29,6 +29,9 @@ services:
       PYTHONDONTWRITEBYTECODE: "1"
       MCP_HOST: 0.0.0.0
       MCP_PORT: "8000"
+    env_file:
+      - ./mcp_local/adapter_env/csv.env
+      - ./mcp_local/adapter_env/sqlite.env
     expose:
       - "8000"
     volumes:

@@ -12,7 +12,7 @@ class CSVTools(MCPTools):
 
     def __init__(self) -> None:
         self.data_dir = Path(
-            os.getenv("DATA_DIR", "/app/data")
+            os.getenv("CSV_DATA_DIR", "/app/data/csv")
         ).resolve()
         self.encoding = os.getenv("CSV_ENCODING", "utf-8")
         self.delimiter = os.getenv("CSV_DELIMITER", ",")
