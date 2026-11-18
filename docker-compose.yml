@@ -27,6 +27,7 @@ services:
     container_name: mcp_local
     environment:
       PYTHONDONTWRITEBYTECODE: "1"
+      DATABASE: CSV
       MCP_HOST: 0.0.0.0
       MCP_PORT: "8000"
     env_file:
@@ -35,7 +36,7 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./data:/app/data:rw
+      - ./data:/app/data:ro
 
   framework_handler:
     build: ./framework_handler
