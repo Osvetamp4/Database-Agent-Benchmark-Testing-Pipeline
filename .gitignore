@@ -1,3 +1,7 @@
 .env
 __pycache__/
 *.py[cod]
+mcp_local/data/csv/*
+!mcp_local/data/csv/.gitkeep
+mcp_local/data/sqlite/*
+!mcp_local/data/sqlite/.gitkeep
