@@ -16,3 +16,5 @@ The selected adapter implements `MCPTools` from `base_mcp_tools.py`. The server 
 Place local CSV files under `data/csv/`. Adapter settings are in `adapter_env/csv.env`, while `adapter_env/sqlite.env` can hold SQLite settings.
 
 The Docker container mounts data read-only and defaults to the CSV backend. To change backends, set `DATABASE` in Docker Compose to `CSV` or a future supported value.
+
+npx @modelcontextprotocol/inspector http://localhost:8000/mcp

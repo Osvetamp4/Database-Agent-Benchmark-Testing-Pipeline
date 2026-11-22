@@ -29,7 +29,6 @@ async def main(): #INPUT ENV: FRAMEWORK_TYPE, USER_QUERY, GOOGLE_API_KEY
         framework_class_name = f"{framework.capitalize()}Logic"
         logic_class = getattr(logic_module,framework_class_name)
         logic = logic_class()
-        
 
         
         
