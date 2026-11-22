@@ -23,6 +23,7 @@ def spawn_worker(framework_name,api_key, user_query):
             "GOOGLE_API_KEY": api_key,
             "USER_QUERY": user_query,
             "REDIS_HOST": "redis_storage",
+            "MCP_URL": os.environ["MCP_URL"],
             "PYTHONUNBUFFERED": 1
         },
         
