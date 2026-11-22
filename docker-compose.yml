@@ -7,6 +7,8 @@ services:
   evaluator:
     build: ./eval
     container_name: evaluator
+    environment:
+      - REDIS_HOSTNAME=redis_storage
     depends_on:
       - redis_storage
   
@@ -15,6 +17,7 @@ services:
     image: redis:7-alpine
     expose:
       - "6379"
+
   redis_insight:
     image: redis/redisinsight:latest
     ports:
@@ -42,7 +45,7 @@ services:
     build: ./framework_handler
     container_name: framework_handler
     environment:
-      - REDIS_HOST=redis_storage
+      - REDIS_HOSTNAME=redis_storage
       - DOCKER_HOST=unix:///var/run/docker.sock
       - FRAMEWORK_LIST=langchain,langchain
       - USER_QUERY="How much wood would a woodchuck chuck if a woodchuck could chuck wood?"

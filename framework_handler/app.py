@@ -22,7 +22,7 @@ def spawn_worker(framework_name,api_key, user_query):
             "FRAMEWORK_TYPE": framework_name,
             "GOOGLE_API_KEY": api_key,
             "USER_QUERY": user_query,
-            "REDIS_HOST": "redis_storage",
+            "REDIS_HOSTNAME": "redis_storage",
             "MCP_URL": os.environ["MCP_URL"],
             "PYTHONUNBUFFERED": 1
         },
@@ -42,8 +42,8 @@ async def main(): #Input ENV: FRAMEWORK_LIST, GOOGLE_API_KEY, USER_QUERY
     google_api_key = os.getenv("GOOGLE_API_KEY", "null")
     user_query = os.getenv("USER_QUERY", "What is the status of my database?")
 
-    REDIS_HOST = os.getenv("REDIS_HOST", "redis_storage")
-    r = redis.Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
+    REDIS_HOSTNAME = os.getenv("REDIS_HOSTNAME", "redis_storage")
+    r = redis.Redis(host=REDIS_HOSTNAME, port=6379, db=0, decode_responses=True)
 
     for i in framework_list:
         spawn_worker(i, google_api_key, user_query)

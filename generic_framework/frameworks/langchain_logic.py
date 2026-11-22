@@ -16,7 +16,8 @@ class LangchainLogic(FrameworkLogic):
     async def initialize(self):
         self.google_api_key = os.getenv("GOOGLE_API_KEY")
         self.mcp_url = os.environ["MCP_URL"]
-        self.redis_hostname = os.getenv("REDIS_HOST","redis")
+        self.redis_hostname = os.getenv("REDIS_HOSTNAME","redis_storage")
+        self.mcp_tools = []
 
         try:
             self.mcp_client = MultiServerMCPClient({
@@ -30,19 +31,21 @@ class LangchainLogic(FrameworkLogic):
             print(f"Error connecting to the MCP server {e}")
 
         try:
-            model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=google_api_key)
+            model = ChatGoogleGenerativeAI(
+                model="gemini-2.5-flash", 
+                google_api_key=self.google_api_key
+            )
             self.model = model.bind_tools(self.mcp_tools)
         except Exception as e:
             print(f"Error connecting to the model {e}")
 
         
-        self.redis_host = None
+        self.redis_client = None
         try:
-            REDIS_HOST = self.redis_hostname
-            self.redis_host = redis.Redis(host=REDIS_HOST, port=6379, db=0, decode_responses=True)
-            self.redis_host.set("system_status", "ready")
-            print(f"Connected to Redis at {REDIS_HOST}!")
-            print("r",self.redis_host)
+            self.redis_client = redis.Redis(host=self.redis_hostname, port=6379, db=0, decode_responses=True)
+            self.redis_client.set("system_status", "ready")
+            print(f"Connected to Redis at {self.redis_hostname}!")
+            print("r",self.redis_client)
         except Exception as e:
             print(f"Error connecting to Redis: {e}")
 
@@ -65,7 +68,7 @@ class LangchainLogic(FrameworkLogic):
             }
             # LPUSH adds the item to the list named 'benchmark_tasks'
             # It returns the new length of the list
-            queue_length = self.redis_host.lpush("test_tasks", json.dumps(task_packet))
+            queue_length = self.redis_client.lpush("test_tasks", json.dumps(task_packet))
         except Exception as e:
             print(f"Error pushing to Redis: {e}")
     
