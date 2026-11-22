@@ -59,7 +59,7 @@ class LangchainLogic(FrameworkLogic):
         ]
         
         # 4. Get the response
-        response = await self.model.ainvoke(messages)
+        response = await self.model.ainvoke(messages) #Change this so that it also uses tool calls in addition to aiinvoke
         print(f"\nAI Response:\n{response.content}")
         try:
             task_packet = {

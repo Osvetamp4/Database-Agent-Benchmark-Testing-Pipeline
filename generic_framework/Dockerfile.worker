@@ -10,6 +10,7 @@ RUN mkdir -p /app/frameworks
 WORKDIR /app
 # Copy the script
 COPY generic.py .
+COPY base_framework.py .
 COPY ./frameworks/*_logic.py ./frameworks
 
 

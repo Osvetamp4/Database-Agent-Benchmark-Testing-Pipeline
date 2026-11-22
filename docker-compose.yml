@@ -39,7 +39,7 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./data:/app/data:ro
+      - ./mcp_local/data:/app/data:ro
 
   framework_handler:
     build: ./framework_handler
