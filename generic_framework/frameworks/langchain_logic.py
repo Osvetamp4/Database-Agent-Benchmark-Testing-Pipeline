@@ -8,7 +8,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 import importlib.util
 import redis
 from base_framework import FrameworkLogic
-class LangChainLogic(FrameworkLogic):
+class LangchainLogic(FrameworkLogic):
     async def run_task(self,user_query:str):
         try:
             REDIS_HOST = os.getenv("REDIS_HOST", "redis")

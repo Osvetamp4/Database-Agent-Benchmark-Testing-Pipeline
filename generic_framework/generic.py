@@ -29,7 +29,7 @@ async def main(): #INPUT ENV: FRAMEWORK_TYPE, USER_QUERY, GOOGLE_API_KEY
         framework_class_name = f"{framework.capitalize()}Logic"
         logic_class = getattr(logic_module,framework_class_name)
         logic = logic_class()
-        result = await logic.run_task(user_query) #userquery
+        
 
         
         
@@ -37,6 +37,8 @@ async def main(): #INPUT ENV: FRAMEWORK_TYPE, USER_QUERY, GOOGLE_API_KEY
 
     except Exception as e:
         print(f"Execution Error: {e}")
+    while True:
+        result = await logic.run_task(user_query) #dont run this, this will run forever and waste a shit ton
 
 if __name__ == "__main__":
     asyncio.run(main())
