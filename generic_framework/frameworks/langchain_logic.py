@@ -1,13 +1,10 @@
 
 import os
-import asyncio
-
 from flask import json
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain.agents import create_agent
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
-import importlib.util
 import redis
 from base_framework import FrameworkLogic
 class LangchainLogic(FrameworkLogic):
@@ -32,12 +29,15 @@ class LangchainLogic(FrameworkLogic):
 
         try:
             model = ChatGoogleGenerativeAI(
-                model="gemini-2.5-flash", 
-                google_api_key=self.google_api_key
+                model="gemini-2.5-flash",
+                google_api_key=self.google_api_key,
             )
-            self.model = model.bind_tools(self.mcp_tools)
+            self.agent = create_agent(
+                model=model,
+                tools=self.mcp_tools,
+            )
         except Exception as e:
-            print(f"Error connecting to the model {e}")
+            print(f"Error creating the LangChain agent {e}")
 
         
         self.redis_client = None
@@ -53,43 +53,24 @@ class LangchainLogic(FrameworkLogic):
     async def run_task(self,user_query:str):
 
         print("user_query:", user_query)
-        messages = [
-                SystemMessage(content="You are a concise AI assistant."),
-                HumanMessage(content=user_query)
-        ]
-        
-        response = await self.model.ainvoke(messages)
+        result = await self.agent.ainvoke(
+            {
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are a concise AI assistant.",
+                    },
+                    {
+                        "role": "user",
+                        "content": user_query,
+                    },
+                ]
+            },
+            {"recursion_limit": 10},
+        )
 
-        while response.tool_calls:
-            tool_messages = []
-
-            for tool_call in response.tool_calls:
-                tool_name = tool_call["name"]
-                tool = next(
-                    (candidate for candidate in self.mcp_tools
-                     if candidate.name == tool_name),
-                    None,
-                )
-
-                if tool is None:
-                    tool_result = f"Unknown MCP tool: {tool_name}"
-                else:
-                    try:
-                        tool_result = await tool.ainvoke(tool_call["args"])
-                    except Exception as e:
-                        tool_result = f"Error calling {tool_name}: {e}"
-
-                tool_messages.append(ToolMessage(
-                    content=str(tool_result),
-                    tool_call_id=tool_call["id"],
-                    name=tool_name,
-                ))
-
-            messages.append(response)
-            messages.extend(tool_messages)
-            response = await self.model.ainvoke(messages)
-
-        print(f"\nAI Response:\n{response.content}")
+        final_message = result["messages"][-1]
+        print(f"\nAI Response:\n{final_message.content}")
         try:
             task_packet = {
                 "user_query": user_query,
