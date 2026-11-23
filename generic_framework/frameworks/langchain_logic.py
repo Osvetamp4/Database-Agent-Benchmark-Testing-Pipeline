@@ -6,7 +6,7 @@ from flask import json
 from langchain_mcp_adapters.client import MultiServerMCPClient
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 import importlib.util
 import redis
 from base_framework import FrameworkLogic
@@ -58,8 +58,37 @@ class LangchainLogic(FrameworkLogic):
                 HumanMessage(content=user_query)
         ]
         
-        # 4. Get the response
-        response = await self.model.ainvoke(messages) #Change this so that it also uses tool calls in addition to aiinvoke
+        response = await self.model.ainvoke(messages)
+
+        while response.tool_calls:
+            tool_messages = []
+
+            for tool_call in response.tool_calls:
+                tool_name = tool_call["name"]
+                tool = next(
+                    (candidate for candidate in self.mcp_tools
+                     if candidate.name == tool_name),
+                    None,
+                )
+
+                if tool is None:
+                    tool_result = f"Unknown MCP tool: {tool_name}"
+                else:
+                    try:
+                        tool_result = await tool.ainvoke(tool_call["args"])
+                    except Exception as e:
+                        tool_result = f"Error calling {tool_name}: {e}"
+
+                tool_messages.append(ToolMessage(
+                    content=str(tool_result),
+                    tool_call_id=tool_call["id"],
+                    name=tool_name,
+                ))
+
+            messages.append(response)
+            messages.extend(tool_messages)
+            response = await self.model.ainvoke(messages)
+
         print(f"\nAI Response:\n{response.content}")
         try:
             task_packet = {
